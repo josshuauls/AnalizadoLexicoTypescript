@@ -24,9 +24,9 @@ BLANCO = [\n| |\t]
 ID = [_|a-z|A-Z][a-z|A-Z|0-9|_]*
 ENTERO = 0|[1-9][0-9]*
 PUNTO_FLOTANTE = [0-9][0-9]*"."[0-9]+
-SIMBOLO = (","|"¡"|"?"|"'")
+SIMBOLO = (","|"¡"|"?"|"'"|".")
 OPERADORES_MATEMATICOS = ("+" | "-" | "*" | "/")
-OPERADORES_LOGICOS = ("==" | "!=" | " =" | "%" | "and" | "or" | "!")
+OPERADORES_LOGICOS = ("==" | "!=" | " =" | "%" | "and" | "or" | "!" | ":")
 OPERADORES_RELACIONALES = ("<" | "<=" | ">" | ">=")
 PARAMETRO = ("(" [_|a-z|A-Z][a-z|A-Z|0-9|_]* ")")
 PARAMETRO_LOGICO = ("(" {ENTERO} ")")
@@ -41,6 +41,7 @@ SENTENCIAS = ("break"|"default"|"case"|"continue")
 "let" { imprimir("Declaracion variable", yytext()); }
 "const" { imprimir("Declaracion constante", yytext()); }
 "function" { imprimir("Declaracion funcion", yytext()); }
+"//" { imprimir("Comentario", yytext()); }
 {BLANCO} { imprimir("Blanco", yytext()); }
 {SENTENCIAS} { imprimir("Sentencia", yytext()); }
 {SENTENCIAS_CONDICIONALES} { imprimir("Sentencia Condicional", yytext()); }
@@ -58,6 +59,10 @@ SENTENCIAS = ("break"|"default"|"case"|"continue")
 {SIMBOLO} { imprimir("simbolo", yytext()); }
 "{" { imprimir("Abrir instrucion", yytext()); }
 "}" { imprimir("Cerrar instruccion", yytext()); }
+"(" { imprimir("Abrir Parametro", yytext()); }
+")" { imprimir("Cerrar Parametro", yytext()); }
+"[" { imprimir("Abrir instancia", yytext()); }
+"]" { imprimir("Cerrar instancia", yytext()); }
 ";" { imprimir("Fin de Instruccion", yytext()); }
 . { throw new RuntimeException("Caracter inválido \""+yytext() +
 "\" en la línea "+yyline+", columna "+yycolumn); }
